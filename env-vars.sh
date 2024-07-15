@@ -1,12 +1,12 @@
-remote_authority_path="git@github.com:example-platform-layer"
+remote_authority_path="git@github.com:example-organization-evt"
 remote_name="origin"
 default_branch="master"
 
-if [ -z "${EXAMPLE_PLATFORM_LAYER_HOME:-}" ]; then
-  printf "\n\e[31mError: EXAMPLE_PLATFORM_LAYER_HOME is not set\e[m\n"
+if [ -z "${EXAMPLE_ORGANIZATION_HOME:-}" ]; then
+  printf "\n\e[31mError: EXAMPLE_ORGANIZATION_HOME is not set\e[m\n"
   exit 1
 fi
-projects_home=$EXAMPLE_PLATFORM_LAYER_HOME
+projects_home=$EXAMPLE_ORGANIZATION_HOME
 
 if [ -n "${GIT_AUTHORITY_PATH:-}" ]; then
   echo "The GIT_AUTHORITY_PATH environment variable is set: $GIT_AUTHORITY_PATH. It will be used for this script."
