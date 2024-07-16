@@ -3,7 +3,7 @@ git_authority_path="git@github.com:example-organization-evt"
 git_default_branch="master"
 git_remote_name="origin"
 rubygems_authority_path="http://localhost:8080"
-rubygems_authority_access_key="example-organization"
+rubygems_authority_access_key=""
 
 if [ -z "${!home_env_var:-}" ]; then
   printf "\e[31mError: $home_env_var is not set\e[39m\n"
