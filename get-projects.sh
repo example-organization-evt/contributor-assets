@@ -69,7 +69,7 @@ function pull-repo() {
       echo
       echo "Working tree is dirty, aborting ($name)"
       echo
-      exit 1
+      false
     fi
 
     autostash_flag="--no-autostash"
