@@ -11,17 +11,17 @@ echo "Start ($(basename "$0"))"
 
 export GIT_CONFIG=/dev/null
 
-source env-vars.sh
+source settings.sh
 
 echo
 echo "Get Projects"
 echo "= = ="
 echo
 
-echo "Projects Home: $projects_home"
-echo "Remote Authority Path: $remote_authority_path"
-echo "Remote Name: $remote_name"
-echo "Default Branch: $default_branch"
+echo "Projects Home: $PROJECTS_HOME"
+echo "Remote Authority Path: $GIT_AUTHORITY_PATH"
+echo "Remote Name: $GIT_REMOTE_NAME"
+echo "Default Branch: $GIT_DEFAULT_BRANCH"
 
 autostash=${AUTOSTASH:-off}
 parallel=${GET_PROJECTS_PARALLEL:-off}
@@ -45,7 +45,7 @@ export -f run-cmd
 function clone-repo() {
   local name=$1
 
-  remote_repository_url="$remote_authority_path/$name.git"
+  remote_repository_url="$GIT_AUTHORITY_PATH/$name.git"
 
   echo "Cloning: $remote_repository_url"
 
@@ -57,9 +57,9 @@ export -f clone-repo
 function pull-repo() {
   local name=$1
 
-  echo "Pulling: $name (master branch only)"
+  echo "Pulling: $name ($GIT_DEFAULT_BRANCH branch only)"
 
-  dir="$projects_home/$name"
+  dir="$PROJECTS_HOME/$name"
   cd "$dir"
 
   if [ "$autostash" = "on" ]; then
@@ -77,14 +77,14 @@ function pull-repo() {
 
   current_branch=$(git branch --no-color 2> /dev/null | sed -n -e 's/* \(.*\)/\1/p')
   if [ master != "$current_branch" ]; then
-    checkout_cmd="git checkout master"
+    checkout_cmd="git checkout $GIT_DEFAULT_BRANCH"
     run-cmd "$checkout_cmd"
   fi
 
-  pull_cmd="git pull $autostash_flag --rebase=merges $remote_name master"
+  pull_cmd="git pull $autostash_flag --rebase=merges $GIT_REMOTE_NAME $GIT_DEFAULT_BRANCH"
   run-cmd "$pull_cmd"
 
-  if [ master != "$current_branch" ]; then
+  if [ "$current_branch" != "$GIT_DEFAULT_BRANCH" ]; then
     co_current_cmd="git checkout $current_branch --quiet"
     run-cmd "$co_current_cmd"
   fi
@@ -98,7 +98,7 @@ function update-repo() {
   echo "$name"
   echo "- - -"
 
-  cd "$projects_home"
+  cd "$PROJECTS_HOME"
 
   dir=$name
 
@@ -115,7 +115,7 @@ working_copies=(
 )
 
 echo
-echo "Getting code from $remote_authority_path ($remote_name)"
+echo "Getting code from $GIT_AUTHORITY_PATH ($GIT_REMOTE_NAME)"
 
 if [ "$parallel" = "on" ] && command -v parallel >/dev/null; then
   jobs=${GET_PROJECTS_PARALLEL_JOBS:-16}

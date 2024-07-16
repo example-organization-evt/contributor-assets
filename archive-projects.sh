@@ -9,7 +9,7 @@ cd "$(dirname "$0")"
 echo
 echo "Start ($(basename "$0"))"
 
-source env-vars.sh
+source settings.sh
 
 echo
 echo "Archiving Obsolete Projects"
@@ -22,7 +22,7 @@ working_copies=(
   "${archived_projects[@]}"
 )
 
-cd "$projects_home"
+cd "$PROJECTS_HOME"
 
 if [ ! -d ".archive" ]; then
   echo "Creating archive directory for obsolete libraries"
@@ -35,7 +35,7 @@ for name in "${working_copies[@]}"; do
   echo "Archiving $name"
 
   if [ ! -d "$name" ]; then
-    echo "$name not found in $projects_home. Skipping."
+    echo "$name not found in $PROJECTS_HOME. Skipping."
   else
     if [ -d ".archive/$name" ]; then
       echo ".archive/$name already exists. Already archived."
